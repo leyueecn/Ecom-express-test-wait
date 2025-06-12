@@ -24,19 +24,19 @@ exports.register = async (req, res) => {
     }
 
     const hashedPassword = await hashPassword(password);
-    console.log(hashedPassword);
 
-    // const newUser = new Data({
-    //   username: username,
-    //   name: name,
-    //   email: email,
-    //   password: hashedPassword,
-    // });
+    // console.log(hashedPassword);
 
-    // await newUser.save();
+    const newUser = new prisma.user.create({
+      data: {
+        username: username,
+        name: name,
+        email: email,
+        password: hashedPassword,
+      },
+    });
 
-    // res.status(201).json({ message: "Register success" });
-    // console.log(newUser);
+    res.status(201).json({ message: "Register success" });
   } catch (err) {
     console.log("Register Error:", err);
     res.status(500).json("Internal server error");
