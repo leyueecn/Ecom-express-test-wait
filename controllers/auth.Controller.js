@@ -1,4 +1,4 @@
-const Data = require("../Model/user.Model");
+const prisma = require("../config/prisma");
 const hashPassword = require("../utils/hashPassword");
 const validatePassword = require("../utils/validatePassword");
 const generateToken = require("../utils/jwtUtils");
@@ -11,8 +11,10 @@ exports.register = async (req, res) => {
   }
 
   try {
-    const existing = await Data.findOne({
-      $or: [{ username }, { email }],
+    const existing = await prisma.user.findFirst({
+      where: {
+        OR: [{ username: username }, { email: email }],
+      },
     });
 
     if (existing) {
@@ -22,17 +24,18 @@ exports.register = async (req, res) => {
     }
 
     const hashedPassword = await hashPassword(password);
+    console.log(hashedPassword);
 
-    const newUser = new Data({
-      username: username,
-      name: name,
-      email: email,
-      password: hashedPassword,
-    });
+    // const newUser = new Data({
+    //   username: username,
+    //   name: name,
+    //   email: email,
+    //   password: hashedPassword,
+    // });
 
-    await newUser.save();
+    // await newUser.save();
 
-    res.status(201).json({ message: "Register success" });
+    // res.status(201).json({ message: "Register success" });
     // console.log(newUser);
   } catch (err) {
     console.log("Register Error:", err);
