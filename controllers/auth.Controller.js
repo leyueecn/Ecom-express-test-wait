@@ -27,7 +27,7 @@ exports.register = async (req, res) => {
 
     // console.log(hashedPassword);
 
-    const newUser = new prisma.user.create({
+    await prisma.user.create({
       data: {
         username: username,
         name: name,
