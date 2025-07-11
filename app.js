@@ -1,8 +1,10 @@
 const express = require("express");
 const morgan = require("morgan");
 const cors = require("cors");
+const path = require("path");
 const fs = require("fs");
-const { readdirSync } = require("fs");
+const connectDB = require("./config/db");
+const errorhandler = require("./middleware/errorHandler");
 // const connectDB = require("./config/db");
 
 const app = express();
@@ -11,26 +13,30 @@ const app = express();
 
 app.use(express.json({ limit: "10mb" }));
 app.use(morgan("dev"));
-app.use(cors());
 
-if (fs.existsSync("./routes")) {
-  readdirSync("./routes").forEach((file) => {
+app.use(
+  cors({
+    origin: ["?"],
+    credentials: true,
+  })
+);
+
+const routesPath = path.join(__dirname, "routes");
+if (fs.existsSync(routesPath)) {
+  fs.readdirSync(routesPath).forEach((file) => {
     if (file.endsWith(".js")) {
       try {
-        app.use("/api", require("./routes/" + file));
+        app.use("/api", require(path.join(routesPath, file)));
         console.log(`✅ Loaded route: ${file}`);
       } catch (err) {
-        console.log(`❌ Error loading route ${file}:`, err);
+        console.error(`❌ Error loading route ${file}:`, err.message);
       }
     }
   });
 } else {
-  console.warn("⚠️  No routes folder found");
+  console.warn("⚠️ No 'routes' folder found. No API routes will be loaded.");
 }
 
-app.use((err, req, res, next) => {
-  console.log("Unexpected error:", err);
-  res.status(500).json({ message: "Something went wrong" });
-});
+app.use(errorhandler);
 
 module.exports = app;
