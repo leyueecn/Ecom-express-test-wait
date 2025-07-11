@@ -68,21 +68,6 @@ exports.login = async (req, res) => {
   }
 };
 
-// exports.profile = async (req, res) => {
-//   try {
-//     if (!req.user) {
-//       return res.status(401).json({ message: "Unauthorized" });
-//     }
-
-//     const { id, username, email, description } = req.user;
-
-//     res.json({ id, username, email, description });
-//   } catch (err) {
-//     console.log("Profile Error:", err);
-//     res.status(500).json("Internal server error");
-//   }
-// };
-
 exports.currentUser = async (req, res) => {
   try {
     //code
@@ -98,7 +83,7 @@ exports.currentUser = async (req, res) => {
     res.json({ user });
   } catch (err) {
     //err
-    console.log(err);
-    res.status(500).json({ message: "Server Error" });
+    console.log("currentUser Error", err.message);
+    res.status(500).json("Internal server error");
   }
 };
