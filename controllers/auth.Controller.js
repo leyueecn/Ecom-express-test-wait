@@ -81,7 +81,6 @@ exports.currentUser = async (req, res) => {
     });
     res.json({ user });
   } catch (err) {
-    //err
     console.log("currentUser Error", err.message);
     res.status(500).json("Internal server error");
   }

@@ -5,12 +5,12 @@ const {
   login,
   currentUser,
 } = require("../controllers/auth.controller");
-const { auth } = require("../middleware/auth");
+const { auth, adminOnly } = require("../middleware/auth");
 
 router.post("/register", register);
 router.post("/login", login);
 
 router.post("/current-user", auth, currentUser);
-// router.post("/current-admin", authCheck, adminCheck, currentUser);
+// router.post("/current-admin", auth, adminOnly, currentUser);
 
 module.exports = router;

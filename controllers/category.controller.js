@@ -4,12 +4,12 @@ exports.create = async (req, res) => {
   const { name } = req.body;
 
   try {
-    const newCategory = await prisma.category.create({
+    const category = await prisma.category.create({
       data: {
         name: name,
       },
     });
-    res.send({ message: "Create successful", newCategory });
+    res.send({ message: "Create successful", category });
   } catch (err) {
     console.log("Create Error", err.message);
     res.status(500).json("Internal server error");
@@ -32,10 +32,10 @@ exports.deleteCategoryById = async (req, res) => {
   try {
     const data = await prisma.category.delete({
       where: {
-        id: Number(id),
+        id: id,
       },
     });
-    res.send({ message: "Category Deleted" });
+    res.send({ message: "Category Deleted", data });
   } catch (err) {
     console.log("deleteCategoryById Error", err.message);
     res.status(500).json("Internal server error");

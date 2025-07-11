@@ -7,7 +7,7 @@ const {
 } = require("../controllers/category.controller");
 const { auth, adminOnly } = require("../middleware/auth");
 
-router.post("/category", auth, create);
+router.post("/category", auth, adminOnly, create);
 router.get("/category", getAllCategory);
 router.delete("/category/:id", auth, adminOnly, deleteCategoryById);
 
