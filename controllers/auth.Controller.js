@@ -1,4 +1,3 @@
-const { use } = require("react");
 const prisma = require("../config/prisma");
 const hashPass = require("../utils/hashPassword");
 const validatePass = require("../utils/validatePassword");
