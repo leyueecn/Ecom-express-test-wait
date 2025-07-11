@@ -9,6 +9,6 @@ const { auth, adminOnly } = require("../middleware/auth");
 
 router.post("/category", auth, create);
 router.get("/category", getAllCategory);
-// router.delete("/category/:id", authCheck, adminCheck, remove);
+router.delete("/category/:id", auth, adminOnly, deleteCategoryById);
 
 module.exports = router;
