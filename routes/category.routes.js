@@ -5,10 +5,9 @@ const {
   getAllCategory,
   deleteCategoryById,
 } = require("../controllers/category.controller");
-// const { authCheck, adminCheck } = require("../middlewares/authCheck");
+const { auth, adminOnly } = require("../middleware/auth");
 
-// // @ENDPOINT http://localhost:5001/api/category
-// router.post("/category", authCheck, adminCheck, create);
+router.post("/category", auth, create);
 router.get("/category", getAllCategory);
 // router.delete("/category/:id", authCheck, adminCheck, remove);
 

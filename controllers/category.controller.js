@@ -1,42 +1,43 @@
 const prisma = require("../config/prisma");
 
 exports.create = async (req, res) => {
+  const { name } = req.body;
+
   try {
-    // code
-    const { name } = req.body;
-    const category = await prisma.category.create({
+    const newCategory = await prisma.category.create({
       data: {
         name: name,
       },
     });
-    res.send(category);
+    res.send({ message: "Create successful", newCategory });
   } catch (err) {
-    console.log(err);
-    res.status(500).json({ message: "Server error" });
+    console.log("Create Error", err.message);
+    res.status(500).json("Internal server error");
   }
 };
+
 exports.getAllCategory = async (req, res) => {
   try {
-    // code
-    const category = await prisma.category.findMany();
-    res.send(category);
+    const data = await prisma.category.findMany();
+    res.send({ message: "CategoryList", data });
   } catch (err) {
-    console.log(err);
-    res.status(500).json({ message: "Server error" });
+    console.log("getAllCategory Error", err.message);
+    res.status(500).json("Internal server error");
   }
 };
+
 exports.deleteCategoryById = async (req, res) => {
+  const { id } = req.params;
+
   try {
-    // code
-    const { id } = req.params;
-    const category = await prisma.category.delete({
+    const data = await prisma.category.delete({
       where: {
         id: Number(id),
       },
     });
-    res.send(category);
+    res.send({ message: "Category Deleted" });
   } catch (err) {
-    console.log(err);
-    res.status(500).json({ message: "Server error" });
+    console.log("deleteCategoryById Error", err.message);
+    res.status(500).json("Internal server error");
   }
 };

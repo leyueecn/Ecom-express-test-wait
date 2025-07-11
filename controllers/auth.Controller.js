@@ -70,7 +70,6 @@ exports.login = async (req, res) => {
 
 exports.currentUser = async (req, res) => {
   try {
-    //code
     const user = await prisma.user.findFirst({
       where: { email: req.user.email },
       select: {
