@@ -68,64 +68,20 @@ exports.login = async (req, res) => {
   }
 };
 
-exports.updateUserById = async (req, res) => {
-  const userId = req.params.id;
-  const updates = ({ username, email, password, description } = req.body);
+// exports.profile = async (req, res) => {
+//   try {
+//     if (!req.user) {
+//       return res.status(401).json({ message: "Unauthorized" });
+//     }
 
-  try {
-    if (updates.password) {
-      updates.password = await hashPass(updates.password);
-    }
+//     const { id, username, email, description } = req.user;
 
-    const updatedUser = await Data.findByIdAndUpdate(userId, updates, {
-      new: true,
-      runValidators: true,
-    });
-
-    if (!updatedUser) {
-      return res.status(404).json({ message: "User not found" });
-    }
-
-    const { password, ...userWithoutPassword } = updatedUser.toObject();
-
-    res.json({ message: "User updated", user: userWithoutPassword });
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ message: "Internal server error" });
-  }
-};
-
-exports.deleteUserById = async (req, res) => {
-  const userId = req.params.id;
-
-  try {
-    const deletedUser = await Data.findByIdAndDelete(userId);
-
-    if (!deletedUser) {
-      return res.status(404).json({ message: "User not found" });
-    }
-
-    res.status(200).json({ message: "deleted successfully" });
-  } catch (err) {
-    console.log("updateUserById Error:", err);
-    res.status(400).json("Internal server error");
-  }
-};
-
-exports.profile = async (req, res) => {
-  try {
-    if (!req.user) {
-      return res.status(401).json({ message: "Unauthorized" });
-    }
-
-    const { id, username, email, description } = req.user;
-
-    res.json({ id, username, email, description });
-  } catch (err) {
-    console.log("Profile Error:", err);
-    res.status(500).json("Internal server error");
-  }
-};
+//     res.json({ id, username, email, description });
+//   } catch (err) {
+//     console.log("Profile Error:", err);
+//     res.status(500).json("Internal server error");
+//   }
+// };
 
 exports.currentUser = async (req, res) => {
   try {
