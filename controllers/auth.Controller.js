@@ -1,12 +1,12 @@
 const prisma = require("../config/prisma");
-const hashPassword = require("../utils/hashPassword");
-const validatePassword = require("../utils/validatePassword");
-const generateToken = require("../utils/jwtUtils");
+const hashPass = require("../utils/hashPassword");
+// const validatePassword = require("../utils/validatePassword");
+// const generateToken = require("../utils/jwtUtils");
 
 exports.register = async (req, res) => {
-  const { username, name, email, password } = req.body;
+  const { username, name, lname, email, password } = req.body;
 
-  if (!username || !name || !email || !password) {
+  if (!username || !name || !lname || !email || !password) {
     return res.status(400).json({ message: "All fields are required" });
   }
 
@@ -23,11 +23,9 @@ exports.register = async (req, res) => {
         .json({ message: "Username or Email is already exists" });
     }
 
-    const hashedPassword = await hashPassword(password);
+    const hashedPassword = await hashPass(password);
 
-    // console.log(hashedPassword);
-
-    await prisma.user.create({
+    await prisma..create({
       data: {
         username: username,
         name: name,
@@ -38,7 +36,7 @@ exports.register = async (req, res) => {
 
     res.status(201).json({ message: "Register success" });
   } catch (err) {
-    console.log("Register Error:", err);
+    console.log("Register Error", err.message);
     res.status(500).json("Internal server error");
   }
 };
@@ -67,7 +65,7 @@ exports.login = async (req, res) => {
 
     res.status(200).json({ message: "Login successful", token });
   } catch (err) {
-    console.log("Login Error:", err);
+    console.log("Login Error:", err.message);
     res.status(500).json("Internal server error");
   }
 };
@@ -78,7 +76,7 @@ exports.updateUserById = async (req, res) => {
 
   try {
     if (updates.password) {
-      updates.password = await hashPassword(updates.password);
+      updates.password = await hashPass(updates.password);
     }
 
     const updatedUser = await Data.findByIdAndUpdate(userId, updates, {
@@ -128,5 +126,25 @@ exports.profile = async (req, res) => {
   } catch (err) {
     console.log("Profile Error:", err);
     res.status(500).json("Internal server error");
+  }
+};
+
+exports.currentUser = async (req, res) => {
+  try {
+    //code
+    const user = await prisma.user.findFirst({
+      where: { email: req.user.email },
+      select: {
+        id: true,
+        email: true,
+        name: true,
+        role: true,
+      },
+    });
+    res.json({ user });
+  } catch (err) {
+    //err
+    console.log(err);
+    res.status(500).json({ message: "Server Error" });
   }
 };
