@@ -5,7 +5,7 @@ const {
   login,
   currentUser,
 } = require("../controllers/auth.controller");
-// const { auth } = require("../middleware/auth.Middleware");
+const { auth } = require("../middleware/auth");
 
 router.post("/register", register);
 router.post("/login", login);
@@ -14,7 +14,7 @@ router.post("/login", login);
 // router.put("/user/:id", auth, User.updateUserById);
 // router.delete("/user/:id", auth, User.deleteUserById);
 
-router.post("/current-user", authCheck, currentUser);
-router.post("/current-admin", authCheck, adminCheck, currentUser);
+router.post("/current-user", currentUser);
+// router.post("/current-admin", authCheck, adminCheck, currentUser);
 
 module.exports = router;
